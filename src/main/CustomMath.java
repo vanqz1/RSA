@@ -40,9 +40,9 @@ public class CustomMath implements Runnable{
 		Apfloat zn = new Apfloat(fact(2*num)).precision(precision);
 		
 		Apfloat rez = ch.divide(zn).precision(precision);
-		partsOfSum.add(rez);
-		
-		System.out.println(Thread.currentThread().getName());
+		synchronized (partsOfSum) {
+			partsOfSum.add(rez);
+		}
 		
 		return rez;
 	}
@@ -61,6 +61,16 @@ public class CustomMath implements Runnable{
 
 	@Override
 	public void run() {
+		String currentTreadNum = Thread.currentThread().getName().substring(14);
+		long startTime = System.currentTimeMillis();
+	
+		System.out.println("Thread-" + currentTreadNum + " started.");
+		
 		CustomMath.calculatePartOfSum(this.num, this.precision);
+		
+		long timeNeeded = System.currentTimeMillis() - startTime;
+		
+		System.out.println("Thread-"+  currentTreadNum + " execution time was (millis):" + timeNeeded);
+		System.out.println("Thread-" + currentTreadNum + " stopped.");
 	}
 }

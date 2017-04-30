@@ -2,6 +2,7 @@ package main;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -19,8 +20,8 @@ public class App {
 	public static void main(String[] args) throws FileNotFoundException,
 			InterruptedException, ExecutionException, RemoteException {
 
-		int numThreads = 400, numTerms = 110;
-		String outFile = "pi";
+		int numThreads = 20, numTerms = 20;
+		String outFile = "å";
 
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
@@ -28,7 +29,7 @@ public class App {
 			if (arg.equals("-p")) {
 				numTerms = Integer.parseInt(args[i + 1]);
 				i++;
-			} else if (arg.equals("-t")) {
+			} else if (arg.equals("-t") || arg.equals("-tasks")) {
 				numThreads = Integer.parseInt(args[i + 1]);
 				i++;
 			} else if (arg.equals("-o")) {
@@ -52,6 +53,8 @@ public class App {
 			System.out.println("Using " + numThreads + " threads");
 		}
 		
+		long startTimeAllCalculations = System.currentTimeMillis();
+		
 		int threadsNeed = numTerms/4;
 		
 		if(threadsNeed < numThreads)
@@ -61,7 +64,7 @@ public class App {
 		
 		ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 		
-		for(int i = 0; i<=numTerms+1; i++)
+		for(int i = 0; i <= numTerms+1; i++)
 		{
 			CustomMath a = new CustomMath(i,numTerms+1);
 			executor.execute(a);
@@ -69,9 +72,18 @@ public class App {
 		
 		executor.shutdown();
 		
-		while(!executor.isTerminated()){}
+		while(!executor.isTerminated()){
+			
+		}
 		
-		System.out.println(CustomMath.getFinalSum());
+		PrintWriter file = new PrintWriter(new FileOutputStream(outFile, false));
+		file.println(CustomMath.getFinalSum().toString());
+		file.flush();
+		file.close();
+		
+		long endTimeAllCalculations = System.currentTimeMillis() - startTimeAllCalculations;
+		
+		System.out.println("Total execution time for current run (millis):" + endTimeAllCalculations);
 }}
 
 	
