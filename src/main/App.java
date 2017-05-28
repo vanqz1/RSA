@@ -7,6 +7,7 @@ import java.rmi.RemoteException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import main.CustomMath;
 
@@ -20,8 +21,8 @@ public class App {
 	public static void main(String[] args) throws FileNotFoundException,
 			InterruptedException, ExecutionException, RemoteException {
 
-		int numThreads = 20, numTerms = 20;
-		String outFile = "å";
+		int numThreads = 10, numTerms = 1000;
+		String outFile = "e";
 
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
@@ -55,26 +56,35 @@ public class App {
 		
 		long startTimeAllCalculations = System.currentTimeMillis();
 		
-		int threadsNeed = numTerms/4;
+		int numtasks = numTerms;
 		
-		if(threadsNeed < numThreads)
+		if(numtasks/2 > 5)
+		{
+			numtasks = numtasks/2 + 1;
+		}
+		
+		int threadsNeed = numtasks/4;
+		
+		
+		
+		if(threadsNeed < numThreads && threadsNeed > 0)
 		{
 			numThreads = threadsNeed;
 		}
 		
 		ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 		
-		for(int i = 0; i <= numTerms+1; i++)
+		
+		
+		for(int i = 0; i <= numtasks/2; i++)
 		{
 			CustomMath a = new CustomMath(i,numTerms+1);
 			executor.execute(a);
 		}
 		
-		executor.shutdown();
+		executor.shutdownNow();
 		
-		while(!executor.isTerminated()){
-			
-		}
+		executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
 		
 		PrintWriter file = new PrintWriter(new FileOutputStream(outFile, false));
 		file.println(CustomMath.getFinalSum().toString());
@@ -83,7 +93,11 @@ public class App {
 		
 		long endTimeAllCalculations = System.currentTimeMillis() - startTimeAllCalculations;
 		
-		System.out.println("Total execution time for current run (millis):" + endTimeAllCalculations);
+		if (!quiet) {
+            System.out.println("Threads used in current run " + numThreads);
+            System.out.println("Total execution time for current run (millis):" + endTimeAllCalculations);
+        }
+		
 }}
 
 	

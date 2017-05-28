@@ -8,24 +8,16 @@ import org.apfloat.Apfloat;
 public class CustomMath implements Runnable{
 	private int num;
 	private int precision;
-	private static ArrayList<Apfloat> partsOfSum;
+	private static Apfloat sum = new Apfloat(1);
 	
 	public CustomMath(int num, int precision)
 	{
 		this.num = num;
 		this.precision = precision;
-		this.partsOfSum = new ArrayList<Apfloat>();
 	}
 	
 	public static Apfloat getFinalSum()
 	{
-		Apfloat sum = new Apfloat(1);
-		
-		for(int i = 0; i < partsOfSum.size(); i++)
-		{
-			sum = sum.add(partsOfSum.get(i));
-		}
-		
 		return sum;
 	}
 	
@@ -40,8 +32,9 @@ public class CustomMath implements Runnable{
 		Apfloat zn = new Apfloat(fact(2*num)).precision(precision);
 		
 		Apfloat rez = ch.divide(zn).precision(precision);
-		synchronized (partsOfSum) {
-			partsOfSum.add(rez);
+		
+		synchronized (sum){
+			sum = sum.add(rez);
 		}
 		
 		return rez;
@@ -61,16 +54,21 @@ public class CustomMath implements Runnable{
 
 	@Override
 	public void run() {
-		String currentTreadNum = Thread.currentThread().getName().substring(14);
-		long startTime = System.currentTimeMillis();
-	
-		System.out.println("Thread-" + currentTreadNum + " started.");
+		try{
+			String currentTreadNum = Thread.currentThread().getName().substring(14);
+			long startTime = System.currentTimeMillis();
 		
-		CustomMath.calculatePartOfSum(this.num, this.precision);
-		
-		long timeNeeded = System.currentTimeMillis() - startTime;
-		
-		System.out.println("Thread-"+  currentTreadNum + " execution time was (millis):" + timeNeeded);
-		System.out.println("Thread-" + currentTreadNum + " stopped.");
+			System.out.println("Thread-" + currentTreadNum + " started.");
+			
+			CustomMath.calculatePartOfSum(this.num, this.precision);
+			
+			long timeNeeded = System.currentTimeMillis() - startTime;
+			
+			System.out.println("Thread-"+  currentTreadNum + " execution time was (millis):" + timeNeeded);
+			System.out.println("Thread-" + currentTreadNum + " stopped.");
+		}
+		catch(Exception e){
+			System.out.println("Error occured:"+  e.getMessage());
+		}
 	}
 }
