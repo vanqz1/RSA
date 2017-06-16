@@ -10,8 +10,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import main.CustomMath;
-
-
 import org.apfloat.Apfloat;
 
 public class App {
