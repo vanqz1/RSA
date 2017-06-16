@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="WINDOWS-1251" standalone="no"?>
+<jardesc>
+    <jar path="C:/Users/vanqz/Desktop/app.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/CalculationE/src/main/app.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" mainClassHandleIdentifier="=CalculationE/src&lt;main{App.java[App" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <file path="/CalculationE/.project"/>
+        <folder path="/CalculationE/lib"/>
+        <javaElement handleIdentifier="=CalculationE/src"/>
+        <folder path="/CalculationE/Test"/>
+        <file path="/CalculationE/~$Calculations.docx"/>
+        <file path="/CalculationE/License.txt"/>
+        <file path="/CalculationE/e"/>
+        <file path="/CalculationE/.classpath"/>
+        <file path="/CalculationE/E-Calculations.docx"/>
+        <file path="/CalculationE/app.jar"/>
+    </selectedElements>
+</jardesc>
